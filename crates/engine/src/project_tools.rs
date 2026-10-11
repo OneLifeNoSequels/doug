@@ -883,8 +883,8 @@ fn pair_p(p: &Value, k: &str) -> Option<(f64, f64)> {
     Some((a.first()?.as_f64()?.clamp(0.0, 50.0), a.get(1)?.as_f64()?.clamp(0.0, 50.0)))
 }
 
-pub const RENDERER_GPU: &str = "Doug GPU Acceleration (wgpu)";
-pub const RENDERER_SOFTWARE: &str = "Doug Software Only (CPU)";
+pub const RENDERER_GPU: &str = "FilmCraft GPU Acceleration (wgpu)";
+pub const RENDERER_SOFTWARE: &str = "FilmCraft Software Only (CPU)";
 
 fn general_json(st: &filmcraft_project::ProjectSettings) -> Value {
     json!({
