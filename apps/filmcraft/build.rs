@@ -20,16 +20,16 @@ mod windows {
     pub fn embed_resources() {
         let mut res = winresource::WindowsResource::new();
         res.set_icon("../../assets/app-icon/filmcraft.ico")
-            .set("ProductName", "FilmCraft")
-            .set("FileDescription", "FilmCraft video editor")
+            .set("ProductName", "Doug")
+            .set("FileDescription", "Doug video editor")
             .set("LegalCopyright", "Copyright (c) the FilmCraft contributors. MIT OR Apache-2.0.")
-            .set("OriginalFilename", "filmcraft.exe")
-            .set("InternalName", "filmcraft");
+            .set("OriginalFilename", "doug.exe")
+            .set("InternalName", "doug");
         if let Err(e) = res.compile() {
             if std::env::var_os("FILMCRAFT_REQUIRE_WINRES").is_some() {
                 panic!("embedding Windows resources failed: {e}");
             }
-            println!("cargo:warning=filmcraft.exe built without icon/version resources: {e}");
+            println!("cargo:warning=doug.exe built without icon/version resources: {e}");
         }
     }
 }
@@ -38,6 +38,6 @@ mod windows {
 #[cfg(not(windows))]
 mod windows {
     pub fn embed_resources() {
-        println!("cargo:warning=filmcraft.exe built without icon/version resources (cross-compiled from a non-Windows host)");
+        println!("cargo:warning=doug.exe built without icon/version resources (cross-compiled from a non-Windows host)");
     }
 }

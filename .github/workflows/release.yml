@@ -1,8 +1,8 @@
+# Doug: upstream FilmCraft pipeline (storytold/craft-common-actions). Kept for reference and
+# manual runs only; Doug's own Windows build is .github/workflows/doug-windows.yml.
 name: Release
 
 on:
-  push:
-    branches: [release]
   workflow_dispatch:
     inputs:
       version:

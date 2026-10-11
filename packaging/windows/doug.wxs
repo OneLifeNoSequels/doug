@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Doug MSI (WiX Toolset v5: `dotnet tool install -g wix`). Built by package.ps1:
+
+    wix build doug.wxs -arch x64 -d Version=1.2.3 -d BinDir=... -d IconPath=... -o out.msi
+
+  Doug is a renamed build of FilmCraft (https://github.com/storytold/filmcraft). Per-machine
+  install into Program Files\Doug with two Start Menu shortcuts: "Doug", and "Doug for Claude",
+  which starts the same app with its localhost control port (9876) open so Claude can drive the
+  live window through doug-cli's MCP server. No file associations.
+-->
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Package
+      Name="Doug"
+      Manufacturer="OneLifeNoSequels"
+      Version="$(var.Version)"
+      UpgradeCode="744D5244-7960-492D-B2AF-229C871F8F60"
+      Scope="perMachine"
+      Compressed="yes"
+      Language="1033">
+    <SummaryInformation Description="Doug video editor (based on FilmCraft)" Manufacturer="OneLifeNoSequels" />
+    <MajorUpgrade AllowSameVersionUpgrades="yes"
+        DowngradeErrorMessage="A newer version of Doug is already installed." />
+    <MediaTemplate EmbedCab="yes" CompressionLevel="high" />
+
+    <Icon Id="DougIcon.ico" SourceFile="$(var.IconPath)" />
+    <Property Id="ARPPRODUCTICON" Value="DougIcon.ico" />
+    <Property Id="ARPURLINFOABOUT" Value="https://github.com/OneLifeNoSequels/doug" />
+    <Property Id="ARPURLUPDATEINFO" Value="https://github.com/OneLifeNoSequels/doug/releases" />
+    <Property Id="ARPHELPLINK" Value="https://github.com/OneLifeNoSequels/doug/issues" />
+
+    <StandardDirectory Id="ProgramFiles6432Folder">
+      <Directory Id="INSTALLFOLDER" Name="Doug" />
+    </StandardDirectory>
+    <StandardDirectory Id="ProgramMenuFolder" />
+
+    <Feature Id="Main" Title="Doug" Level="1">
+      <ComponentGroupRef Id="DougFiles" />
+    </Feature>
+  </Package>
+
+  <Fragment>
+    <ComponentGroup Id="DougFiles" Directory="INSTALLFOLDER">
+      <Component Id="DougApp" Guid="9D83C928-9485-4709-A029-12F1AA6963A2">
+        <File Id="DougExe" Source="$(var.BinDir)\doug.exe" KeyPath="yes">
+          <Shortcut Id="StartMenuShortcut" Directory="ProgramMenuFolder" Name="Doug"
+              Description="Doug video editor" WorkingDirectory="INSTALLFOLDER" Advertise="yes"
+              Icon="DougIcon.ico" IconIndex="0" />
+          <Shortcut Id="StartMenuClaudeShortcut" Directory="ProgramMenuFolder" Name="Doug for Claude"
+              Description="Doug with its local control port open, so Claude can operate it"
+              Arguments="--control 9876" WorkingDirectory="INSTALLFOLDER" Advertise="yes"
+              Icon="DougIcon.ico" IconIndex="0" />
+        </File>
+
+        <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\App Paths\doug.exe" Value="[#DougExe]" Type="string" />
+      </Component>
+
+      <Component Id="DougCli" Guid="74F4D23C-C0AB-41BF-864C-C9D130D233DF">
+        <File Id="DougCliExe" Source="$(var.BinDir)\doug-cli.exe" KeyPath="yes" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>

@@ -1,13 +1,10 @@
+# Doug: upstream FilmCraft pipeline (storytold/craft-common-actions). Kept for reference and
+# manual runs only; Doug's own Windows build is .github/workflows/doug-windows.yml.
 # Quick static checks for the release pipeline (seconds, no Rust build): workflow syntax,
 # packaging shell/PowerShell scripts, and the Linux desktop/AppStream/Flatpak metadata.
 name: Packaging lint
 
 on:
-  push:
-    branches: [main, release]
-    paths: [".github/workflows/**", "packaging/**", "assets/app-icon/**"]
-  pull_request:
-    paths: [".github/workflows/**", "packaging/**", "assets/app-icon/**"]
   workflow_dispatch:
 
 permissions:

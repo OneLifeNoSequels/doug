@@ -1,3 +1,5 @@
+# Doug: upstream FilmCraft pipeline (storytold/craft-common-actions). Kept for reference and
+# manual runs only; Doug's own Windows build is .github/workflows/doug-windows.yml.
 # Windows on ARM: package the ARM64 release the way release.yml does (cross-compiled on an x64
 # runner, unsigned here), then install that MSI on a Windows 11 ARM64 runner, check the installed
 # binaries are ARM64, run the CLI natively, and uninstall. (A native ARM64 `cargo test` job is left
@@ -5,18 +7,6 @@
 name: Windows ARM64
 
 on:
-  push:
-    branches: [main]
-  pull_request:
-    paths:
-      - Cargo.toml
-      - Cargo.lock
-      - "**/Cargo.toml"
-      - "**/build.rs"
-      - .github/workflows/windows-arm64.yml
-      - packaging/windows/**
-  schedule:
-    - cron: "41 4 * * 1" # weekly, so drift in the runner images shows up
   workflow_dispatch:
 
 concurrency:

@@ -1,10 +1,10 @@
 //! FilmCraft headless CLI: every engine command is one shell call away, for scripts and AI agents.
 //!
-//! Run `filmcraft-cli help` for the full reference (also in docs/agents.md).
+//! Run `doug-cli help` for the full reference (also in docs/agents.md).
 
 #![cfg_attr(not(test), deny(clippy::unwrap_used, clippy::expect_used, clippy::panic, clippy::unimplemented, clippy::todo, clippy::unreachable))]
 
-/// `println!` that doesn't panic when stdout is closed (`filmcraft-cli commands | head`) with
+/// `println!` that doesn't panic when stdout is closed (`doug-cli commands | head`) with
 /// "failed printing to stdout: Broken pipe (os error 32)". Once stdout has failed, later output is
 /// dropped and the work goes on: see `stdout_failed`.
 macro_rules! outln {
@@ -56,15 +56,15 @@ fn stdout_failed(e: std::io::Error) {
     if STDOUT_GONE.swap(true, Ordering::Relaxed) || e.kind() == std::io::ErrorKind::BrokenPipe {
         return;
     }
-    diag(format_args!("filmcraft-cli: can't write to stdout: {e}"));
+    diag(format_args!("doug-cli: can't write to stdout: {e}"));
     STDOUT_ERROR.store(true, Ordering::Relaxed);
 }
 
 const HELP: &str = "\
-filmcraft-cli: drive FilmCraft from the shell (headless engine, or the live app with --bridge)
+doug-cli: drive Doug from the shell (headless engine, or the live app with --bridge)
 
 USAGE
-  filmcraft-cli [OPTIONS] <SUBCOMMAND> [ARGS]
+  doug-cli [OPTIONS] <SUBCOMMAND> [ARGS]
 
 SUBCOMMANDS
   exec <id> [key=value ...]     run one command; prints its result as JSON
@@ -101,7 +101,7 @@ OPTIONS
   --demo                        open the built-in demo project (headless)
   --save                        save the project back to --project when done
   --save-as <p.fcproj>          save the project to this path when done
-  --bridge <127.0.0.1:PORT>     send commands to the running app (`filmcraft --control PORT`)
+  --bridge <127.0.0.1:PORT>     send commands to the running app (`doug --control PORT`)
   --data-dir <dir>              FilmCraft data directory for user export presets (headless;
                                 default: the app's data directory)
   --keep-going                  `run`: report failing lines and continue
@@ -127,12 +127,12 @@ fn diag(msg: std::fmt::Arguments) {
 }
 
 fn usage(msg: impl std::fmt::Display) -> ! {
-    diag(format_args!("filmcraft-cli: {msg}\nRun `filmcraft-cli help` for usage."));
+    diag(format_args!("doug-cli: {msg}\nRun `doug-cli help` for usage."));
     std::process::exit(2)
 }
 
 fn fail(msg: impl std::fmt::Display) -> ! {
-    diag(format_args!("filmcraft-cli: {msg}"));
+    diag(format_args!("doug-cli: {msg}"));
     std::process::exit(1)
 }
 
@@ -254,7 +254,7 @@ async fn main() {
 
 async fn cli() {
     let a = Args::parse(std::env::args().skip(1));
-    // `--help` anywhere (`filmcraft-cli --help`, `filmcraft-cli export --help`) prints the reference:
+    // `--help` anywhere (`doug-cli --help`, `doug-cli export --help`) prints the reference:
     // the parser takes it as a flag option, so it never reaches the subcommand match.
     if a.flag("--help") {
         out!("{HELP}");
@@ -262,7 +262,7 @@ async fn cli() {
     }
     // `--version` anywhere and `-V` as the subcommand, also after global options (`--demo --version`, #710).
     if a.wants_version() {
-        outln!("filmcraft-cli {}", env!("CARGO_PKG_VERSION"));
+        outln!("doug-cli {}", env!("CARGO_PKG_VERSION"));
         return;
     }
     register_hardware_decoders();
@@ -270,7 +270,7 @@ async fn cli() {
     let Some(cmd) = a.pos(0) else { usage("missing subcommand") };
     match cmd {
         "help" | "-h" => out!("{HELP}"),
-        "version" => outln!("filmcraft-cli {}", env!("CARGO_PKG_VERSION")),
+        "version" => outln!("doug-cli {}", env!("CARGO_PKG_VERSION")),
         "probe" => {
             let path = a.pos(1).unwrap_or_else(|| usage("probe <media> [--image-sequence]"));
             match probe::probe(path, a.flag("--image-sequence")) {
@@ -302,7 +302,7 @@ async fn cli() {
                 let id = a.pos(1).unwrap_or_else(|| usage("describe <id>"));
                 match list.iter().find(|c| c["id"] == id) {
                     Some(c) => print(&a, c),
-                    None => fail(format!("unknown command `{id}` (try `filmcraft-cli commands {id}`)")),
+                    None => fail(format!("unknown command `{id}` (try `doug-cli commands {id}`)")),
                 }
                 return;
             }

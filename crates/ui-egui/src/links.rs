@@ -12,17 +12,17 @@ pub const DISCORD: &str = "https://discord.gg/artcraft";
 pub const WEBSITE: &str = "https://getartcraft.com";
 /// FilmCraft's page on the ArtCraft website.
 pub const APP_PAGE: &str = "https://getartcraft.com/apps/filmcraft";
-/// FilmCraft's source repository.
-pub const GITHUB: &str = "https://github.com/storytold/filmcraft";
-/// New issue on FilmCraft's repository.
-pub const ISSUES: &str = "https://github.com/storytold/filmcraft/issues";
+/// Doug's source repository (upstream: https://github.com/storytold/filmcraft).
+pub const GITHUB: &str = "https://github.com/OneLifeNoSequels/doug";
+/// New issue on Doug's repository.
+pub const ISSUES: &str = "https://github.com/OneLifeNoSequels/doug/issues";
 
 /// (command id, label, url) for every link, in menu order.
 pub const ALL: [(&str, &str, &str); 5] = [
     ("help.discord", "Join the ArtCraft Discord…", DISCORD),
     ("help.website", "ArtCraft Website", WEBSITE),
     ("help.appPage", "FilmCraft on getartcraft.com", APP_PAGE),
-    ("help.github", "FilmCraft on GitHub", GITHUB),
+    ("help.github", "Doug on GitHub", GITHUB),
     ("help.reportIssue", "Report an Issue…", ISSUES),
 ];
 
@@ -52,7 +52,7 @@ mod tests {
     #[test]
     fn urls_follow_the_artcraft_scheme() {
         assert_eq!(APP_PAGE, format!("{WEBSITE}/apps/{APP}"));
-        assert_eq!(GITHUB, format!("https://github.com/storytold/{APP}"));
+        assert_eq!(GITHUB, "https://github.com/OneLifeNoSequels/doug");
         assert!(ALL.iter().all(|(id, _, u)| id.starts_with("help.") && u.starts_with("https://")));
         assert_eq!(url_for("help.discord"), Some(DISCORD));
         assert_eq!(url_for("help.nope"), None);

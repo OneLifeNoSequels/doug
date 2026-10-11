@@ -1,3 +1,5 @@
+# Doug: upstream FilmCraft pipeline (storytold/craft-common-actions). Kept for reference and
+# manual runs only; Doug's own Windows build is .github/workflows/doug-windows.yml.
 # Builds FilmCraft on FreeBSD, inside a FreeBSD VM on a Linux runner (GitHub has no FreeBSD
 # runners), then runs packaging/freebsd/package.sh, the script the release job runs, and checks
 # the tarball. A broken FreeBSD build or package fails here before it can fail a release. Nothing
@@ -9,13 +11,6 @@ name: FreeBSD
 # dependency change: a drifted dependency still shows up within a day. PRs that change the
 # FreeBSD packaging itself still run it.
 on:
-  schedule:
-    - cron: "37 2 * * *"
-  pull_request:
-    paths:
-      - .github/workflows/freebsd.yml
-      - packaging/freebsd/**
-      - packaging/env.sh
   workflow_dispatch:
 
 concurrency:

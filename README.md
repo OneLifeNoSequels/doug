@@ -1,14 +1,68 @@
-<p align="center">
-  <a href="https://getartcraft.com/">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="docs/brand/artcraft-logo-white.svg">
-      <img alt="ArtCraft" src="docs/brand/artcraft-logo.svg" width="200">
-    </picture>
-  </a>
-</p>
+# Doug
+
+**Doug is a renamed build of [FilmCraft](https://github.com/storytold/filmcraft)**, the open-source,
+pure-Rust video editor (Premiere Pro-style editing, color and sound) by the ArtCraft team, set up
+so Claude can operate it. The program files are `doug.exe` and `doug-cli.exe`; the code underneath
+is FilmCraft's, under the same MIT OR Apache-2.0 licence (see [NOTICE](NOTICE)). Doug is not
+affiliated with or endorsed by the ArtCraft team.
+
+## Install on Windows
+
+1. Open the [latest release](https://github.com/OneLifeNoSequels/doug/releases/latest) and download
+   `doug-<version>-windows-x64.msi`.
+2. Run it. The build is unsigned, so Windows SmartScreen asks once: **More info ▸ Run anyway**,
+   then approve the installer.
+3. Start menu now has **Doug** (normal use) and **Doug for Claude** (the same app with its local
+   control port 9876 open, so Claude can drive the live window).
+
+No-install alternative: the `-portable.zip` from the same release; unzip anywhere and run `doug.exe`.
+
+## Let Claude operate Doug
+
+Doug ships an MCP server in `doug-cli.exe`. In the Claude desktop app: **Settings ▸ Developer ▸
+Edit Config**, add the `doug` entries below inside `"mcpServers"` (keep anything already there),
+save, then fully quit and reopen Claude.
+
+```json
+{
+  "mcpServers": {
+    "doug": {
+      "command": "C:\\Program Files\\Doug\\doug-cli.exe",
+      "args": ["mcp", "--bridge", "127.0.0.1:9876"]
+    },
+    "doug-headless": {
+      "command": "C:\\Program Files\\Doug\\doug-cli.exe",
+      "args": ["mcp"]
+    }
+  }
+}
+```
+
+- **doug** drives the Doug window you can see. Start **Doug for Claude** from the Start menu first.
+  Claude can then run any of Doug's 650+ editing commands, click, type, and take screenshots.
+- **doug-headless** runs Doug's engine with no window (import, edit, render frames, export), for
+  when you just want the result.
+
+Then ask Claude things like *"In Doug, import the clips in my Videos folder, lay them on the
+timeline, add a cross dissolve between each, and export an H.264 MP4."* The full tool list is in
+[docs/agents.md](docs/agents.md) (replace `filmcraft` with `doug` in the commands it shows).
+
+## Build from source
+
+```sh
+cargo run --release -p filmcraft            # builds and runs doug
+cargo run --release -p filmcraft-cli -- mcp # doug-cli's MCP server
+```
+
+Windows installers are built by the **Build Doug for Windows** workflow
+([.github/workflows/doug-windows.yml](.github/workflows/doug-windows.yml)): run it from the Actions
+tab, or push a `v*` tag, and it publishes the MSI and portable zip as a release.
+
+---
 
 
-<h1 align="center">FilmCraft</h1>
+
+<h2 align="center">The original FilmCraft README</h2>
 
 <p align="center">
   <b>Video editing, color and sound; an open-source, clean-room reimplementation of Adobe Premiere Pro, rebuilt in pure Rust.</b>

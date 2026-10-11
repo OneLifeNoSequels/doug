@@ -1,14 +1,19 @@
 [package]
 name = "filmcraft"
-description = "FilmCraft desktop app"
+description = "Doug desktop app (based on FilmCraft)"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
-default-run = "filmcraft"
+default-run = "doug"
 build = "build.rs"
 
 [lints]
 workspace = true
+
+# The program file is doug(.exe); the package keeps its upstream name so the code stays mergeable.
+[[bin]]
+name = "doug"
+path = "src/main.rs"
 
 [features]
 default = []
@@ -55,6 +60,6 @@ winit = { version = "0.30", default-features = false }
 # portal file dialogs (rfd) and accesskit already use.
 zbus = "5.19"
 
-# Icon + VERSIONINFO for filmcraft.exe (build.rs); only needed when building on Windows.
+# Icon + VERSIONINFO for doug.exe (build.rs); only needed when building on Windows.
 [target.'cfg(windows)'.build-dependencies]
 winresource = "0.1"
